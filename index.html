@@ -1478,23 +1478,50 @@ a { text-decoration: none; }
       </div>
     </div>
     <div class="login-title" id="login-title">Connexion</div>
-    <div class="login-sub" id="login-sub">Entrez votre adresse email et votre mot de passe.</div>
+    <div class="login-sub" id="login-sub">Sélectionnez votre nom et entrez votre mot de passe.</div>
 
     <div class="lf">
-      <label class="ll">Adresse email</label>
-      <input class="linp" type="email" id="login-email" placeholder="prenom.nom@boulanger.com"
-             autocomplete="email" oninput="onLoginEmailInput()" onkeydown="if(event.key==='Enter')document.getElementById('login-pwd').focus()">
+      <label class="ll">Votre nom</label>
+      <select class="lsel" id="login-agent" onchange="onLoginAgentChange()">
+        <option value="">— Sélectionnez votre nom —</option>
+        <option value="BACHELARD Djazia|djazia.bachelard@boulanger.com">BACHELARD Djazia</option>
+        <option value="BROUTIN Loïc|loic.broutin@boulanger.com">BROUTIN Loïc</option>
+        <option value="DUSSART Camille|camille.dussart@boulanger.com">DUSSART Camille</option>
+        <option value="EVERAERT Noé|noe.everaert@boulanger.com">EVERAERT Noé</option>
+        <option value="FOULON Guillaume|guillaume.foulon@boulanger.com">FOULON Guillaume</option>
+        <option value="GUENET Amandine|amandine.guenet@boulanger.com">GUENET Amandine</option>
+        <option value="HAUDRECHY Nathalie|nathalie.haudrechy@boulanger.com">HAUDRECHY Nathalie</option>
+        <option value="HUPELIER Rita|rita.hupelier@boulanger.com">HUPELIER Rita</option>
+        <option value="KALEMA ASSANI Mandévu|mandevu.kalema-assani@boulanger.com">KALEMA ASSANI Mandévu</option>
+        <option value="KIRALY Camille|camille.kiraly@boulanger.com">KIRALY Camille</option>
+        <option value="LECOMTE Erwan|erwan.lecomte@boulanger.com">LECOMTE Erwan</option>
+        <option value="LEMAIRE Raphaëlle|raphaelle.lemaire@boulanger.com">LEMAIRE Raphaëlle</option>
+        <option value="LETERME Wendy|wendy.leterme@boulanger.com">LETERME Wendy</option>
+        <option value="MASQUELIER Pierre-Antoine|pierre-antoine.masquelier@boulanger.com">MASQUELIER Pierre-Antoine</option>
+        <option value="NEANTIEN Princesse|princesse.neantien@boulanger.com">NEANTIEN Princesse</option>
+        <option value="PETILLON Aurélie|aurelie.petillon@boulanger.com">PETILLON Aurélie</option>
+        <option value="VANAERDE Andy|andy.vanaerde@boulanger.com">VANAERDE Andy</option>
+        <option value="WANNEHAIN Clement|clement.wannehain@boulanger.com">WANNEHAIN Clement</option>
+      </select>
     </div>
 
-    <div class="lf">
+    <div class="lf" id="pwd-field" style="display:none">
       <label class="ll" id="pwd-lbl">Mot de passe</label>
       <div class="pwd-wrap">
-        <input class="linp" type="password" id="login-pwd" placeholder="Mot de passe"
-               autocomplete="current-password" onkeydown="if(event.key==='Enter')submitLogin()">
+        <input class="linp" type="password" id="login-pwd" placeholder="Mot de passe" onkeydown="if(event.key==='Enter')submitLogin()">
         <button class="pwd-eye" onclick="togglePwdVis('login-pwd',this)">👁</button>
       </div>
+      <div class="sbar" id="strength-bar" style="display:none"><div class="sfill" id="strength-fill"></div></div>
+      <div class="lhint" id="pwd-hint"></div>
       <div class="forgot-wrap">
         <button class="forgot-link" id="forgot-btn" type="button" onclick="forgotPassword()">Mot de passe oublié ?</button>
+      </div>
+    </div>
+    <div class="lf" id="pwd2-field" style="display:none">
+      <label class="ll">Confirmer le mot de passe</label>
+      <div class="pwd-wrap">
+        <input class="linp" type="password" id="login-pwd2" placeholder="Répéter le mot de passe" onkeydown="if(event.key==='Enter')submitLogin()">
+        <button class="pwd-eye" onclick="togglePwdVis('login-pwd2',this)">👁</button>
       </div>
     </div>
     <div class="lerr" id="login-error"></div>
@@ -1798,7 +1825,7 @@ a { text-decoration: none; }
           <div class="settings-card">
             <div class="settings-card-header">
               <div class="settings-card-title">🔑 Mot de passe</div>
-              <div class="settings-card-sub">Géré via Firebase Authentication</div>
+              <div class="settings-card-sub">Chiffré localement en SHA-256</div>
             </div>
             <div class="settings-card-body">
               <div class="settings-row">
@@ -1945,7 +1972,7 @@ a { text-decoration: none; }
 <div class="modal-bg" id="changepwd-modal" style="display:none!important">
   <div class="modal">
     <div class="modal-title">🔑 Changer de mot de passe</div>
-    <div class="modal-sub">Votre nouveau mot de passe sera mis à jour via Firebase Authentication.</div>
+    <div class="modal-sub">Votre nouveau mot de passe sera chiffré et stocké localement.</div>
     <div class="modal-row"><div class="modal-lbl">Mot de passe actuel</div><div class="pwd-wrap"><input class="modal-input" type="password" id="cp-current-modal"><button class="pwd-eye" onclick="togglePwdVis('cp-current-modal',this)">👁</button></div></div>
     <div class="modal-row"><div class="modal-lbl">Nouveau mot de passe</div><div class="pwd-wrap"><input class="modal-input" type="password" id="cp-new-modal"><button class="pwd-eye" onclick="togglePwdVis('cp-new-modal',this)">👁</button></div></div>
     <div class="modal-row"><div class="modal-lbl">Confirmer</div><div class="pwd-wrap"><input class="modal-input" type="password" id="cp-confirm-modal"><button class="pwd-eye" onclick="togglePwdVis('cp-confirm-modal',this)">👁</button></div></div>
@@ -2026,10 +2053,10 @@ async function syncSettingsPage() {
 // ═══════════════════════════════════════════════
 // CONSTANTES
 // ═══════════════════════════════════════════════
-const TASKS=["LVB 905","Incident LVB F905","Rem Express","Reliquat F905","RBT Manuel F905","Dossiers posés F905","PLVB","Selfcare Annulation","Selfcare Retour","Geste Co","A annuler","Incident","Carte Kdo","Rappel ADV F905","Retour BES","Gestion des dossiers PMS","PO GAM F905","Réquisition Judiciaire","VAE","Infos Club","Omnibox Club","Résiliation Club"];
+const TASKS=["LVB 905","Incident LVB F905","Rem Express","Reliquat F905","RBT Manuel F905","Dossiers posés F905","PLVB","Selfcare Annulation","Selfcare Retour","Geste Co","A annuler","Incident","Carte Kdo","Rappel ADV F905","Retour BES","Gestion des dossiers PMS","PO GAM F905","Réquisition Judiciaire","VAE","Infos Club","Omnibox Club","Résiliation Club","CIL","Fusion","Autres CIL","Modération"];
 const ELIGIBLE_CALLS=new Set(["LVB 905","Incident LVB F905","Rem Express","Reliquat F905","Selfcare Annulation","Geste Co"]);
-const FORM_ACTION="https://docs.google.com/forms/d/e/1FAIpQLSfInblJ6kqJXsQhs4wNYY2AL9s-0d3-2ThVWAYGitVJ-xuRrw/formResponse";
-const E_EMAIL="entry.110053621",E_TACHE="entry.1434083717",E_NB="entry.1335063546";
+const FORM_ACTION="https://docs.google.com/forms/d/e/1FAIpQLSeyEkuKyzw3N_pARSjTK-BvSCUseOn-ic3GbVgtmX9NSOd_8g/formResponse";
+const E_TACHE="entry.1719063440",E_NB="entry.1475516478";
 const OBJ=16, AUTO_MS=3*60*1000, LUNCH_THRESHOLD_H=6;
 const BONUS_GRID=[
   [0,0,0,0,0,0,0,0],[0,0,0,0,90,90,90,90],[0,0,30,50,50,50,70,70],[0,0,30,50,50,50,70,70],
@@ -2067,26 +2094,31 @@ function togglePwdVis(id,btn){const i=document.getElementById(id);i.type=i.type=
 // ═══════════════════════════════════════════════
 // LOGIN — Firebase
 // ═══════════════════════════════════════════════
-function onLoginEmailInput(){
-  const email=document.getElementById("login-email").value.trim();
+function onLoginAgentChange(){
+  const val=document.getElementById("login-agent").value;
+  const pf=document.getElementById("pwd-field");
   document.getElementById("login-error").className="lerr";
-  document.getElementById("login-btn").disabled=!email;
+  document.getElementById("login-pwd").value="";
+  if(!val){pf.style.display="none";document.getElementById("login-btn").disabled=true;return;}
+  document.getElementById("login-title").textContent="Connexion";
+  document.getElementById("login-sub").textContent="Entrez votre mot de passe.";
+  document.getElementById("pwd-lbl").textContent="Mot de passe";
+  pf.style.display="block";document.getElementById("login-btn").disabled=false;
 }
 async function submitLogin(){
-  const email=document.getElementById("login-email").value.trim();
-  if(!email){showLoginErr("Veuillez entrer votre adresse email.");return;}
+  const val=document.getElementById("login-agent").value;if(!val)return;
+  const parts=val.split("|"),name=parts[0],email=parts[1]||"";
   const pwd=document.getElementById("login-pwd").value;
   if(!pwd){showLoginErr("Veuillez entrer un mot de passe.");return;}
   const btn=document.getElementById("login-btn");
   btn.textContent="Connexion en cours…";btn.disabled=true;
   try{
     const uc=await auth.signInWithEmailAndPassword(email,pwd);
-    const name=uc.user.displayName||email.split("@")[0].replace(/\./g," ").replace(/\b\w/g,c=>c.toUpperCase());
     await startApp(name,email,uc.user.uid);
   }catch(err){
     let msg="Erreur de connexion.";
     if(err.code==="auth/wrong-password"||err.code==="auth/invalid-credential")msg="Mot de passe incorrect.";
-    else if(err.code==="auth/user-not-found"||err.code==="auth/invalid-email")msg="Adresse email inconnue. Vérifiez votre saisie.";
+    else if(err.code==="auth/user-not-found")msg="Compte introuvable. Contactez votre responsable.";
     else if(err.code==="auth/too-many-requests")msg="Trop de tentatives. Réessayez dans quelques minutes.";
     else if(err.code==="auth/network-request-failed")msg="Erreur réseau. Vérifiez votre connexion.";
     showLoginErr(msg);btn.textContent="Se connecter";btn.disabled=false;
@@ -2098,6 +2130,7 @@ function showLoginErr(msg){const e=document.getElementById("login-error");e.text
 // MOT DE PASSE OUBLIÉ — Firebase Auth
 // ═══════════════════════════════════════════════
 function forgotPassword() {
+  var sel       = document.getElementById("login-agent");
   var errEl     = document.getElementById("login-error");
   var successEl = document.getElementById("login-success");
   var btn       = document.getElementById("forgot-btn");
@@ -2105,9 +2138,16 @@ function forgotPassword() {
   errEl.className     = "lerr";
   successEl.className = "lsuccess";
 
-  var email = document.getElementById("login-email").value.trim();
+  var val = sel.value;
+  if (!val) {
+    showLoginErr("Sélectionnez d'abord votre nom dans la liste.");
+    return;
+  }
+
+  var parts = val.split("|");
+  var email = parts[1] ? parts[1].trim() : "";
   if (!email) {
-    showLoginErr("Entrez d'abord votre adresse email.");
+    showLoginErr("Impossible de récupérer l'adresse email. Contactez votre responsable.");
     return;
   }
 
@@ -2127,7 +2167,7 @@ function forgotPassword() {
       btn.disabled    = false;
       var msg = "Impossible d'envoyer l'email de réinitialisation.";
       if (err.code === "auth/user-not-found")            msg = "Aucun compte associé à cet email. Contactez votre responsable.";
-      else if (err.code === "auth/invalid-email")         msg = "L'adresse email saisie est invalide.";
+      else if (err.code === "auth/invalid-email")         msg = "L'adresse email associée à ce compte est invalide.";
       else if (err.code === "auth/too-many-requests")     msg = "Trop de demandes envoyées. Attendez quelques minutes.";
       else if (err.code === "auth/network-request-failed") msg = "Erreur réseau. Vérifiez votre connexion internet.";
       showLoginErr(msg);
@@ -2163,8 +2203,8 @@ function logout(){
   agent="";agentEmail="";agentUid="";_cachedPeriod=null;
   document.getElementById("app").className="";
   document.getElementById("login-screen").style.display="flex";
-  document.getElementById("login-email").value="";
-  document.getElementById("login-pwd").value="";
+  document.getElementById("login-agent").value="";
+  document.getElementById("pwd-field").style.display="none";
   document.getElementById("login-btn").disabled=true;
   document.getElementById("login-error").className="lerr";
 }
@@ -2507,7 +2547,7 @@ async function confirmDecl(){
 async function genForm(hours,lunchDeducted,calls){
   const active=TASKS.filter(t=>(state[t]||0)>0);
   const links=active.map((t,i)=>{
-    const p=new URLSearchParams();p.set(E_EMAIL,agentEmail);p.set(E_TACHE,t);p.set(E_NB,String(state[t]));
+    const p=new URLSearchParams();p.set(E_TACHE,t);p.set(E_NB,String(state[t]));
     const u=`${FORM_ACTION}?${p.toString()}`;
     return `<div class="res-link-item"><span class="res-link-name">${t}</span><span class="res-link-count">${state[t]} tâche${state[t]>1?"s":""}</span><button class="res-link-btn" id="lb-${i}" onclick="openLink('${encodeURIComponent(u)}',${i})">Ouvrir ↗</button></div>`;
   }).join("");
@@ -2553,7 +2593,9 @@ initSidebar();
 
 auth.onAuthStateChanged(async (user) => {
   if (user) {
-    const name = user.displayName || user.email.split("@")[0].replace(/\./g," ").replace(/\b\w/g,c=>c.toUpperCase());
+    const sel=document.getElementById("login-agent");
+    const opt=[...sel.options].find(o=>o.value.includes(user.email));
+    const name=opt?opt.value.split("|")[0]:user.email;
     await startApp(name, user.email, user.uid);
   }
 });
